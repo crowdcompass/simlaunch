@@ -28,6 +28,7 @@
 
 #import "LauncherAppDelegate.h"
 #import "LauncherSimClient.h"
+#import "iPhoneSimulator.h"
 
 /* Resource subdirectory for the embedded application */
 #define APP_DIR @"EmbeddedApp"
@@ -90,39 +91,23 @@
         [[NSApplication sharedApplication] terminate: self];
         return;
     }
-
-    /* Find the matching platform SDKs. We don't care about version, but do care about the SDK the 
-     * app was built with and the device families it requires/supports */
-    _discovery = [[PLSimulatorDiscovery alloc] initWithMinimumVersion: nil
-                                                     canonicalSDKName: _app.canonicalSDKName
-                                                       deviceFamilies: _app.deviceFamilies];
-    _discovery.delegate = self;
-    [_discovery startQuery];
     
-}
+    iPhoneSimulator *sim = [[iPhoneSimulator alloc] init];
+    [sim configure];
 
-// from PLSimulatorDiscoveryDelegate protocol
-- (void) simulatorDiscovery: (PLSimulatorDiscovery *) discovery didFindMatchingSimulatorPlatforms: (NSArray *) platforms {
-    /* No platforms found */
-    if ([platforms count] == 0) {
-        NSString *infoFmt = NSLocalizedString(@"The iPhone SDK required by the application could not be found. Please install the %@ SDK and try again.", 
-                                              @"App SDK not found");
-    
-        NSAlert *alert = [NSAlert alertWithMessageText: NSLocalizedString(@"Required iPhone SDK not found.", @"SDK not found")
-                                         defaultButton: NSLocalizedString(@"Quit", @"Quit button")
-                                       alternateButton: nil
-                                           otherButton: nil
-                             informativeTextWithFormat: infoFmt, _app.canonicalSDKName];
-        [alert runModal];
-        [[NSApplication sharedApplication] terminate: self];
-        return;
+    NSArray *simulators = [sim simulators];
+    SimDevice *device = [sim simDeviceNamed:@"iPhone 6"];
+    if (!device) {
+        device = simulators.lastObject;
     }
-
-    /* Launch with the discovery-preferred platform */
-    LauncherSimClient *client = [[LauncherSimClient alloc] initWithPlatform: [platforms objectAtIndex: 0] 
-                                                                        app: _app
-                                                        defaultDeviceFamily: _defaultDeviceFamily];
-    [client launch];
+    
+    [sim launchApp:_app.path
+        withFamily:nil
+       withTimeout:15.f
+              udid:[device.UDID UUIDString]
+              uuid:nil
+       environment:nil
+              args:nil];
 }
 
 @end

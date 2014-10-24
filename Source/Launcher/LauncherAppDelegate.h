@@ -30,7 +30,7 @@
 
 #import "PLSimulator.h"
 
-@interface LauncherAppDelegate : NSObject <PLSimulatorDiscoveryDelegate> {
+@interface LauncherAppDelegate : NSObject {
 @private
     /** Instance used to find the required simulator platform SDK */
     PLSimulatorDiscovery *_discovery;

@@ -127,7 +127,7 @@
 
     /* Load the SDK root */
     if (sdk != nil) {
-        sdkRoot = [C(DTiPhoneSimulatorSystemRoot) rootWithSDKVersion: sdk.version];
+        sdkRoot = [C(DTiPhoneSimulatorSystemRoot) defaultRoot]; // rootWithSDKVersion: sdk.version];
         if (sdkRoot == nil) {
             NSString *fmt = NSLocalizedString(@"The iPhoneSimulator %@ SDK was not found. Please install the SDK and try again.",
                                               @"SDK load failure alert info");

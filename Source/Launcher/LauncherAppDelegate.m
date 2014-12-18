@@ -1,4 +1,4 @@
-/*
+    /*
  * Author: Landon Fuller <landonf@plausiblelabs.com>
  *
  * Copyright (c) 2010 Plausible Labs Cooperative, Inc.
@@ -94,9 +94,14 @@
     
     iPhoneSimulator *sim = [[iPhoneSimulator alloc] init];
     [sim configure];
-
+    
+    NSString *deviceName = [[NSUserDefaults standardUserDefaults] stringForKey:@"device"];
+    if (deviceName == nil) {
+        deviceName = @"iPhone 6";
+    }
+    
     NSArray *simulators = [sim simulators];
-    SimDevice *device = [sim simDeviceNamed:@"iPhone 6"];
+    SimDevice *device = [sim simDeviceNamed:deviceName];
     if (!device) {
         device = simulators.lastObject;
     }

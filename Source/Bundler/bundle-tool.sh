@@ -54,7 +54,23 @@ parse_plist () {
 	# Read the display name
 	APP_NAME=`${PLIST_CMD} -c "Print CFBundleDisplayName" "${PLIST}"`
 	APP_BUNDLE_ID=`${PLIST_CMD} -c "Print CFBundleIdentifier" "${PLIST}"`
-	APP_ICON=`${PLIST_CMD} -c "Print CFBundleIconFile" "${PLIST}"`
+	APP_ICONS=`${PLIST_CMD} -c "Print CFBundleIcons:CFBundlePrimaryIcon:CFBundleIconFiles" "${PLIST}"`
+
+	for ICON in $APP_ICONS; do
+		ICON_PATH="${APP}/${ICON}"
+		if [ -f $APP/$ICON ]; then
+			IMAGE_WIDTH=`/usr/bin/sips --getProperty pixelWidth ${ICON_PATH} |grep pixelWidth|cut -f2 -d ":"`
+			if [ $IMAGE_WIDTH -ge 114 ]; then
+				APP_ICON="${ICON_PATH}"
+				break
+			fi
+		fi
+	done
+
+	if [ -z "${APP_ICON}" ]; then
+     	# Default Icon
+		APP_ICON="${APP}/Icon.png"
+	fi
 
 	if [ -z "${APP_NAME}" ]; then
 		echo "${APP} is missing a valid CFBundleDisplayName"
@@ -64,14 +80,6 @@ parse_plist () {
 	if [ -z "${APP_BUNDLE_ID}" ]; then
 		echo "${APP} is missing a valid CFBundleIdentifier"
 		exit ${SOURCE_APP_INVALID}
-	fi
-
-	# Convert to absolute path
-	if [ -z "${APP_ICON}" ]; then
-		# Defaults to Icon.png
-		APP_ICON="${APP}/Icon.png"
-	else
-		APP_ICON="${APP}/${APP_ICON}"
 	fi
 }
 
@@ -122,14 +130,9 @@ populate_meta_data () {
 		local resampled=`mktemp /tmp/${tempfoo}.XXXXXX`
 		check_error "Could not create temporary file for Icon resampling" ${DESTINATION_WRITE_FAILED}
 
-		# Convert the icon. If we were really cool, we'd support applying the same effects that Apple
-		# does. Use ImageMagick if available.
-		local convert=`which convert`
-		if [ ! -z "$convert" ]; then
-			$convert "${APP_ICON}" -resample 128x128 "${APP_DEST}/${ICNS_FILE}"
-		else
-			/usr/bin/sips --resampleWidth 128 -s format icns "${APP_ICON}" --out "${APP_DEST}/${ICNS_FILE}"
-		fi
+		#No longer trying to use image magick here, as it does not support ICNS file format
+		/usr/bin/sips --resampleWidth 128 -s format icns "${APP_ICON}" --out "${APP_DEST}/${ICNS_FILE}"
+
 		check_error "Failed to convert application icon" ${DESTINATION_WRITE_FAILED}
 
 		# Clean up

@@ -41,11 +41,11 @@
     NSError *error;
     PLSimulatorApplication *app = [[PLSimulatorApplication alloc] initWithPath: [self pathForResource: @"iPadHelloWorld.app"] 
                                                                          error: &error];
-    STAssertNotNil(app, @"Could not read app meta-data: %@", error);
+    XCTAssertNotNil(app, @"Could not read app meta-data: %@", error);
     
-    STAssertEqualObjects(@"iPadHelloWorld", app.displayName, @"Incorrect display name");
-    STAssertEqualObjects([NSSet setWithObject: [PLSimulatorDeviceFamily ipadFamily]], app.deviceFamilies, @"Incorrect device family setting");
-    STAssertEqualObjects(@"iphonesimulator3.2", app.canonicalSDKName, @"Incorrect SDK name");
+    XCTAssertEqualObjects(@"iPadHelloWorld", app.displayName, @"Incorrect display name");
+    XCTAssertEqualObjects([NSSet setWithObject: [PLSimulatorDeviceFamily ipadFamily]], app.deviceFamilies, @"Incorrect device family setting");
+    XCTAssertEqualObjects(@"iphonesimulator3.2", app.canonicalSDKName, @"Incorrect SDK name");
 }
 
 @end

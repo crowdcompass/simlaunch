@@ -49,7 +49,7 @@
 
     /* Spin until the SDK results are available */
     [self spinRunloopWithTimeout: 60.0 predicate: ^{ return (BOOL) (_foundSDKs != nil); }];
-    STAssertNotNil(_foundSDKs, @"Timed out waiting for query results");
+    XCTAssertNotNil(_foundSDKs, @"Timed out waiting for query results");
 }
 
 // from PLSimulatorDiscoveryDelegate protocol

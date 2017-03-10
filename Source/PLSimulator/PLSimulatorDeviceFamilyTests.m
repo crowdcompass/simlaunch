@@ -39,24 +39,24 @@
 @implementation PLSimulatorDeviceFamilyTests
 
 - (void) testDeviceFamilyForCode {
-    STAssertEqualObjects([PLSimulatorDeviceFamily iphoneFamily], 
+    XCTAssertEqualObjects([PLSimulatorDeviceFamily iphoneFamily],
                          [PLSimulatorDeviceFamily deviceFamilyForDeviceCode: DTiPhoneSimulatoriPhoneFamily], 
                          @"Should be equal");
     
-    STAssertEqualObjects([PLSimulatorDeviceFamily ipadFamily], 
+    XCTAssertEqualObjects([PLSimulatorDeviceFamily ipadFamily],
                          [PLSimulatorDeviceFamily deviceFamilyForDeviceCode: DTiPhoneSimulatoriPadFamily], 
                          @"Should be equal");
 }
 
 // Sanity test isEqual/hash
 - (void) testEquality {
-    STAssertEqualObjects([PLSimulatorDeviceFamily iphoneFamily], [PLSimulatorDeviceFamily iphoneFamily], @"Should be equal");
-    STAssertEquals([[PLSimulatorDeviceFamily iphoneFamily] hash], [[PLSimulatorDeviceFamily iphoneFamily] hash], @"Should be equal");
+    XCTAssertEqualObjects([PLSimulatorDeviceFamily iphoneFamily], [PLSimulatorDeviceFamily iphoneFamily], @"Should be equal");
+    XCTAssertEqual([[PLSimulatorDeviceFamily iphoneFamily] hash], [[PLSimulatorDeviceFamily iphoneFamily] hash], @"Should be equal");
 
-    STAssertEqualObjects([PLSimulatorDeviceFamily ipadFamily], [PLSimulatorDeviceFamily ipadFamily], @"Should be equal");
-    STAssertEquals([[PLSimulatorDeviceFamily ipadFamily] hash], [[PLSimulatorDeviceFamily ipadFamily] hash], @"Should be equal");
+    XCTAssertEqualObjects([PLSimulatorDeviceFamily ipadFamily], [PLSimulatorDeviceFamily ipadFamily], @"Should be equal");
+    XCTAssertEqual([[PLSimulatorDeviceFamily ipadFamily] hash], [[PLSimulatorDeviceFamily ipadFamily] hash], @"Should be equal");
 
-    STAssertFalse([[PLSimulatorDeviceFamily iphoneFamily] isEqual: [PLSimulatorDeviceFamily ipadFamily]], @"Should not be equal");
+    XCTAssertFalse([[PLSimulatorDeviceFamily iphoneFamily] isEqual: [PLSimulatorDeviceFamily ipadFamily]], @"Should not be equal");
 }
 
 @end

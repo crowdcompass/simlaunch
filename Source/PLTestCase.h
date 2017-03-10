@@ -26,9 +26,9 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
-@interface PLTestCase : SenTestCase
+@interface PLTestCase : XCTestCase
 
 - (void) spinRunloopWithTimeout: (NSTimeInterval) timeout predicate: (BOOL (^)()) predicate;
 

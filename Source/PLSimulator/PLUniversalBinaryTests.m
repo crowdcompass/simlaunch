@@ -38,12 +38,12 @@
 - (void) testWithUniversal {
     NSError *error;
     PLUniversalBinary *binary = [PLUniversalBinary binaryWithPath: [self pathForResource: @"test-universal"] error: &error];
-    STAssertNotNil(binary, @"Failed to load binary: %@", error);
+    XCTAssertNotNil(binary, @"Failed to load binary: %@", error);
 
-    STAssertEquals([[binary executables] count], (NSUInteger)2, @"Two executables should have been found");
+    XCTAssertEqual([[binary executables] count], (NSUInteger)2, @"Two executables should have been found");
     
     PLExecutableBinary *exec = [binary executableMatchingCurrentArchitecture];
-    STAssertTrue(exec != nil, @"Executable matching current architecture was not found");
+    XCTAssertNotNil(exec, @"Executable matching current architecture was not found");
 }
 
 @end

@@ -39,21 +39,21 @@
 - (void) testInit {
     NSError *error;
     PLSimulatorSDK *sdk = [[PLSimulatorSDK alloc] initWithPath: [self pathForResource: @"3.1.sdk"] error: &error];
-    STAssertNotNil(sdk, @"Could not read SDK meta-data: %@", error);
-    STAssertEqualObjects(@"3.1", sdk.version, @"Incorrect version");
+    XCTAssertNotNil(sdk, @"Could not read SDK meta-data: %@", error);
+    XCTAssertEqualObjects(@"3.1", sdk.version, @"Incorrect version");
     
-    STAssertTrue([sdk.deviceFamilies containsObject: [PLSimulatorDeviceFamily iphoneFamily]], @"SDK does not include iPhone support");
+    XCTAssertTrue([sdk.deviceFamilies containsObject: [PLSimulatorDeviceFamily iphoneFamily]], @"SDK does not include iPhone support");
 }
 
 - (void) testDeviceFamilyHandling {
     NSError *error;
     PLSimulatorSDK *sdk = [[PLSimulatorSDK alloc] initWithPath: [self pathForResource: @"3.2.sdk"] error: &error];
-    STAssertNotNil(sdk, @"Could not read SDK meta-data: %@", error);
-    STAssertEqualObjects(@"3.2", sdk.version, @"Incorrect version");
+    XCTAssertNotNil(sdk, @"Could not read SDK meta-data: %@", error);
+    XCTAssertEqualObjects(@"3.2", sdk.version, @"Incorrect version");
     
     NSLog(@"Families: %@", sdk.deviceFamilies);
-    STAssertTrue([sdk.deviceFamilies containsObject: [PLSimulatorDeviceFamily iphoneFamily]], @"SDK does not include iPhone support");
-    STAssertTrue([sdk.deviceFamilies containsObject: [PLSimulatorDeviceFamily ipadFamily]], @"SDK does not include iPad support");
+    XCTAssertTrue([sdk.deviceFamilies containsObject: [PLSimulatorDeviceFamily iphoneFamily]], @"SDK does not include iPhone support");
+    XCTAssertTrue([sdk.deviceFamilies containsObject: [PLSimulatorDeviceFamily ipadFamily]], @"SDK does not include iPad support");
 
 }
 

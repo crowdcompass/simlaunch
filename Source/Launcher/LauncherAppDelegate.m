@@ -27,7 +27,6 @@
  */
 
 #import "LauncherAppDelegate.h"
-#import "LauncherSimClient.h"
 #import "iPhoneSimulator.h"
 
 /* Resource subdirectory for the embedded application */
@@ -101,18 +100,26 @@
     }
     
     NSArray *simulators = [sim simulators];
+	
     SimDevice *device = [sim simDeviceNamed:deviceName];
     if (!device) {
         device = simulators.lastObject;
     }
-    
-    [sim launchApp:_app.path
-        withFamily:nil
-       withTimeout:15.f
-              udid:[device.UDID UUIDString]
-              uuid:nil
-       environment:nil
-              args:nil];
+	
+	if ( device ) {
+		if ( [sim launchApp:_app.path
+				 withFamily:nil
+				withTimeout:15.f
+					   udid:[device.UDID UUIDString]
+					   uuid:nil
+				environment:nil
+					   args:nil] != EXIT_SUCCESS ) {
+			NSLog(@"Failed to launch app at \"%@\" with device %@",_app.path,[device.UDID UUIDString]);
+		}
+	}
+	else {
+		NSLog(@"Couldn't find an appropriate device to launch");
+	}
 }
 
 @end

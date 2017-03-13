@@ -26,8 +26,13 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#import <CoreSimulator/CDStructures.h>
+#import <CoreSimulator/SimRuntime.h>
+#import <CoreSimulator/SimDeviceType.h>
+#import <CoreSimulator/SimDeviceSet.h>
+#import <CoreSimulator/SimDevice.h>
 #import "LauncherSimClient.h"
-
+#import <SimulatorHost/SimulatorHost.h>
 #import <ScriptingBridge/ScriptingBridge.h>
 
 /* App bundle ID. Used to request that the simulator be brought to the foreground */

@@ -23,7 +23,8 @@
 #import <Foundation/Foundation.h>
 #import "DVTiPhoneSimulatorRemoteClient.h"
 //#import <DVTiPhoneSimulatorRemoteClient/DVTiPhoneSimulatorRemoteClient.h>
-#import "CoreSimulator.h"
+
+@class SimDevice;
 
 @interface iPhoneSimulator : NSObject <DTiPhoneSimulatorSessionDelegate> {
 @private

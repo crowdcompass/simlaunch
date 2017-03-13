@@ -23,6 +23,15 @@
 
 #import "iPhoneSimulator.h"
 #import "NSString+expandPath.h"
+#import <CoreSimulator/CDStructures.h>
+#import <CoreSimulator/SimRuntime.h>
+#import <CoreSimulator/SimRuntime+Removed.h>
+#import <CoreSimulator/SimDeviceType.h>
+#import <CoreSimulator/SimDeviceSet.h>
+#import <CoreSimulator/SimDeviceSet+Removed.h>
+#import <CoreSimulator/SimDevice.h>
+#import <CoreSimulator/SimServiceContext.h>
+#import "DVTiPhoneSimulatorRemoteClient.h"
 
 @class DTiPhoneSimulatorSystemRoot;
 
@@ -111,7 +120,6 @@ NSString * const kXcode6CoreSimulatorRelativePath = @"Library/PrivateFrameworks/
         NSLog(@"Unable to load simulator framework");
         exit(EXIT_FAILURE);
     }
-    return;
 }
 
 // Finds the developer dir via xcode-select or the DEVELOPER_DIR environment
@@ -223,10 +231,29 @@ NSString* FindDeveloperDir() {
 
 }
 
+- (SimDeviceSet *)defaultDeviceSet
+{
+	NSError *error = nil;
+	NSString *developerDir = FindDeveloperDir();
+	NSLog(@"Developer directory located at: \"%@\"",developerDir);
+	
+	Class simServiceContextClass = [self FindClassByName:@"SimServiceContext"];
+	id context = [simServiceContextClass sharedServiceContextForDeveloperDir:developerDir error:&error];
+	if ( !error ) {
+		NSLog(@"%@ - Error getting shared service context for developer directory \"%@\" (%@)",NSStringFromSelector(_cmd), developerDir, error);
+	}
+	error = nil;
+	SimDeviceSet * simDeviceSet = [context defaultDeviceSetWithError:&error];
+	if ( !simDeviceSet ) {
+		NSLog(@"Error creating SimDeviceSet with deviceSetWithPath:error:");
+	}
+	return simDeviceSet;
+}
+
 -(SimDevice *)FindDeviceToBeSimulated:(NSString *)udid {
-    
-    Class simDeviceSetClass = [self FindClassByName:@"SimDeviceSet"];
-    NSArray *devices = [[simDeviceSetClass defaultSet] availableDevices];
+	NSLog(@"%@",NSStringFromSelector(_cmd));
+
+	NSArray *devices = [self simulators];
 
     for (id device in devices) {
         if (verbose) {
@@ -270,8 +297,7 @@ NSString* FindDeveloperDir() {
 }
 
 - (NSArray *)simulators {
-    Class simDeviceSetClass = [self FindClassByName:@"SimDeviceSet"];
-    NSArray *devices = [[simDeviceSetClass defaultSet] availableDevices];
+    NSArray *devices = [[self defaultDeviceSet] availableDevices];
 
     return devices;
 }
